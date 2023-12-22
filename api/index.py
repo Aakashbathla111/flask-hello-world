@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 
 def getcontext():
-    json_keyfile_path = {
+    credentials_dict = {
      "type": "service_account",
      "project_id": "oncalls-dev",
      "private_key_id": "b02f4d031c627ab1f225999a7e3eef972d740437",
@@ -28,17 +28,15 @@ def getcontext():
 
 
 # Connect to Google Sheets using service account credentials
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(json_keyfile_path, scope)
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
     gc = gspread.authorize(credentials)
 
-# Replace 'your_spreadsheet_key' with the key of your Google Spreadsheet
-    spreadsheet_key = '1BrQxNhXigEgf0o8QNkX7iX3ZODw3CjOhRBmHTJKWWOg'
+# Now you can use gc to open a spreadsheet, etc.
+    spreadsheet = gc.open_by_key("1BrQxNhXigEgf0o8QNkX7iX3ZODw3CjOhRBmHTJKWWOg")
 
-# Open the Google Spreadsheet using its key
-    workbook = gc.open_by_key(spreadsheet_key)
-
-    worksheet = workbook.sheet1
+# Select a specific worksheet (by title or index)
+    worksheet = spreadsheet.get_worksheet(0)  # Replace with your worksheet title or index
     columns_to_read = ['Date', 'T1', 'T2'] 
 
     df = pd.DataFrame(worksheet.get_all_records(empty2zero=False), columns = columns_to_read)
