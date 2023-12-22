@@ -1,3 +1,4 @@
+import json
 from flask import Flask, jsonify, request
 import schedule
 import time
@@ -85,17 +86,17 @@ def run_script():
             url = "https://api.flock.com/hooks/sendMessage/b1520c67-2f57-47e9-bb75-651c632dd78d"
             headers = {'Content-Type': 'application/json'}
             json_payload = {
-                "text": payload_data
+                "text": json.dumps(payload_data)
             }
-            response = requests.post(url, headers=headers, json=json_payload)
+            requests.post(url, headers=headers, json=json_payload)
         if token_value == '12c453f1-1625-4400-8ed0-2d6ecf3a3552':
             url = "https://api.flock.com/hooks/sendMessage/b1520c67-2f57-47e9-bb75-651c632dd78d"
             headers = {'Content-Type': 'application/json'}
             json_payload = {
                 "text": context
             }
-            response = requests.post(url, headers=headers, json=json_payload)
-    return jsonify({'output': response}), 200
+            requests.post(url, headers=headers, json=json_payload)
+    return jsonify({'output': "SUCCESS"}), 200
 
 
 @app.route('/about')
