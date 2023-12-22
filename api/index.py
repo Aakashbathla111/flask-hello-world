@@ -85,17 +85,17 @@ def run_script():
             url = "https://api.flock.com/hooks/sendMessage/b1520c67-2f57-47e9-bb75-651c632dd78d"
             headers = {'Content-Type': 'application/json'}
             json_payload = {
-                "text": context
+                "text": payload_data
             }
             response = requests.post(url, headers=headers, json=json_payload)
         if token_value == '12c453f1-1625-4400-8ed0-2d6ecf3a3552':
             url = "https://api.flock.com/hooks/sendMessage/b1520c67-2f57-47e9-bb75-651c632dd78d"
             headers = {'Content-Type': 'application/json'}
             json_payload = {
-                "text": "with token"
+                "text": context
             }
             response = requests.post(url, headers=headers, json=json_payload)
-    return jsonify({'output': "success"}), 200
+    return jsonify({'output': response}), 200
 
 
 @app.route('/about')
