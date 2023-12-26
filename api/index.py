@@ -8,9 +8,6 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.cron import CronTrigger
-
-app = Flask(__name__)
 
 
 def getcontext():
@@ -40,8 +37,6 @@ def getcontext():
     spreadsheet = gc.open_by_key(
         "1BrQxNhXigEgf0o8QNkX7iX3ZODw3CjOhRBmHTJKWWOg")
 
-# Select a specific worksheet (by title or index)
-    # Replace with your worksheet title or index
     worksheet = spreadsheet.get_worksheet(0)
     columns_to_read = ['Date', 'T1', 'email_T1', 'email_T2', 'T2']
 
@@ -64,7 +59,7 @@ def getcontext():
         people1_email = df.loc[index, 'email_T1']
         people2_email = df.loc[index, 'email_T2']
         context = 'Oncalls devsss for today are: \n ' + \
-            people_value1 + '(' + people1_email + '), \n' + people_value2 + '(' + people2_email + ')'
+            people_value1 + '(' + people1_email + '), \n' + people_value2 + ' hello(' + people2_email + ')'
     else:
         context = 'Spreadsheet needs  to be updated'
     return context
@@ -81,8 +76,10 @@ def hit_curl():
     return
 
 
+app = Flask(__name__)
+
 scheduler = BackgroundScheduler()
-scheduler.add_job(hit_curl, 'cron', hour=13, minute=31, second=0)
+scheduler.add_job(hit_curl, 'cron', hour=15, minute=18, second=0)
 scheduler.start()
 
 
