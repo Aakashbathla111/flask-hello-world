@@ -85,7 +85,7 @@ def hit_curl():
 app = Flask(__name__)
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(hit_curl, 'cron', hour=15, minute=18, second=0)
+scheduler.add_job(hit_curl, 'cron', hour=16, minute=48, second=0)
 scheduler.start()
 
 
