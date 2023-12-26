@@ -63,7 +63,7 @@ def getcontext():
         people1_email = df.loc[index, 'email_T1']
         people2_email = df.loc[index, 'email_T2']
         context = 'Oncalls devsss for today are: \n ' + \
-            people_value1 + '(' + people1_email + '), \n' + people_value2 + ' hel(' + people2_email + ')'
+            people_value1 + '(' + people1_email + '), \n' + people_value2 + ' hells(' + people2_email + ')'
     else:
         context = 'Spreadsheet needs  to be updated'
     return context
@@ -85,7 +85,7 @@ def hit_curl():
 app = Flask(__name__)
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(hit_curl, 'cron', hour=16, minute=48, second=0)
+scheduler.add_job(hit_curl, 'cron', hour=16, minute=53, second=0)
 scheduler.start()
 
 
