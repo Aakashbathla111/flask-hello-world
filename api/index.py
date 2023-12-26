@@ -42,7 +42,7 @@ def getcontext():
 # Select a specific worksheet (by title or index)
     # Replace with your worksheet title or index
     worksheet = spreadsheet.get_worksheet(0)
-    columns_to_read = ['Date', 'T1', 'T2']
+    columns_to_read = ['Date', 'T1', 'email_T1', 'email_T2', 'T2']
 
     df = pd.DataFrame(worksheet.get_all_records(
         empty2zero=False), columns=columns_to_read)
@@ -60,8 +60,10 @@ def getcontext():
     # Get the value in the 'People' column at the found index
         people_value1 = df.loc[index, 'T1']
         people_value2 = df.loc[index, 'T2']
+        people1_email = df.loc[index, 'email_T1']
+        people2_email = df.loc[index, 'email_T2']
         context = 'Oncalls devs for today are ' + \
-            people_value1 + '(L1), ' + people_value2 + '(L2)'
+            people_value1 + '(' + people1_email + '), ' + people_value2 + '(' + people2_email + ')'
     else:
         context = 'Spreadsheet needs  to be updated'
     return context
