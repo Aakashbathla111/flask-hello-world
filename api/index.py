@@ -51,8 +51,8 @@ def getcontext():
         target_date = today.strftime('%Y-%m-%d')
     else:
         days_since_last_tuesday = (today.weekday() - 1) % 7
-    previous_tuesday = today - timedelta(days=days_since_last_tuesday)
-    target_date = previous_tuesday.strftime('%Y-%m-%d')
+        previous_tuesday = today - timedelta(days=days_since_last_tuesday)
+        target_date = previous_tuesday.strftime('%Y-%m-%d')
     index_of_date = df['Date'].index[df['Date'] == target_date].tolist()
 
     if index_of_date:
