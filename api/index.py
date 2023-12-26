@@ -70,8 +70,19 @@ def getcontext():
     return context
 
 
+def hit_curl():
+    context = getcontext()
+    url = "https://api.flock.com/hooks/sendMessage/b1520c67-2f57-47e9-bb75-651c632dd78d"
+    headers = {'Content-Type': 'application/json'}
+    json_payload = {
+        "text": context
+    }
+    response = requests.post(url, headers=headers, json=json_payload)
+    return
+
+
 scheduler = BackgroundScheduler()
-scheduler.add_job(getcontext, 'cron', hour=13, minute=28, second=0)
+scheduler.add_job(hit_curl, 'cron', hour=13, minute=31, second=0)
 scheduler.start()
 
 
