@@ -81,7 +81,6 @@ def run_script():
         payload_data = request.get_json()
 
         # Access 'token' and 'text' values from the payload
-        token_value = payload_data.get('token', None)
         text_value = payload_data.get('text', None)
         if text_value == 'oncall/cart':
             context = getcontext()
