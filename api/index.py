@@ -7,7 +7,8 @@ import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime, timedelta
-
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 app = Flask(__name__)
 
@@ -67,6 +68,11 @@ def getcontext():
     else:
         context = 'Spreadsheet needs  to be updated'
     return context
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(getcontext, 'cron', hour=13, minute=28, second=0)
+scheduler.start()
 
 
 @app.route('/')
