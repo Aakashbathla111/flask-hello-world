@@ -8,6 +8,10 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
+import logging
+
+# Configure logging to output to the console
+logging.basicConfig(level=logging.INFO)
 
 
 def getcontext():
@@ -59,13 +63,14 @@ def getcontext():
         people1_email = df.loc[index, 'email_T1']
         people2_email = df.loc[index, 'email_T2']
         context = 'Oncalls devsss for today are: \n ' + \
-            people_value1 + '(' + people1_email + '), \n' + people_value2 + ' hello(' + people2_email + ')'
+            people_value1 + '(' + people1_email + '), \n' + people_value2 + ' hel(' + people2_email + ')'
     else:
         context = 'Spreadsheet needs  to be updated'
     return context
 
 
 def hit_curl():
+    logging.info("Function execution started")
     context = getcontext()
     url = "https://api.flock.com/hooks/sendMessage/b1520c67-2f57-47e9-bb75-651c632dd78d"
     headers = {'Content-Type': 'application/json'}
@@ -73,7 +78,8 @@ def hit_curl():
         "text": context
     }
     response = requests.post(url, headers=headers, json=json_payload)
-    return
+    logging.info("Function execution completed")
+    return response.send({"message": "Success"})
 
 
 app = Flask(__name__)
