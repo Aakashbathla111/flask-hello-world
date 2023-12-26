@@ -62,8 +62,8 @@ def getcontext():
         people_value2 = df.loc[index, 'T2']
         people1_email = df.loc[index, 'email_T1']
         people2_email = df.loc[index, 'email_T2']
-        context = 'Oncalls devs for today are ' + \
-            people_value1 + '(' + people1_email + '), ' + people_value2 + '(' + people2_email + ')'
+        context = 'Oncalls devs for today are: \n ' + \
+            people_value1 + '(' + people1_email + '), \n' + people_value2 + '(' + people2_email + ')'
     else:
         context = 'Spreadsheet needs  to be updated'
     return context
