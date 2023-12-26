@@ -79,9 +79,17 @@ def run_script():
         payload_data = request.get_json()
 
         # Access 'token' and 'text' values from the payload
+        token_value = payload_data.get('token', None)
         text_value = payload_data.get('text', None)
         if text_value == 'oncall/cart':
             context = getcontext()
+            url = "https://api.flock.com/hooks/sendMessage/b1520c67-2f57-47e9-bb75-651c632dd78d"
+            headers = {'Content-Type': 'application/json'}
+            json_payload = {
+                "text": json.dumps(payload_data)
+            }
+            requests.post(url, headers=headers, json=json_payload)
+        if token_value == '12c453f1-1625-4400-8ed0-2d6ecf3a3552':
             url = "https://api.flock.com/hooks/sendMessage/b1520c67-2f57-47e9-bb75-651c632dd78d"
             headers = {'Content-Type': 'application/json'}
             json_payload = {
