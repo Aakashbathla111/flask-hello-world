@@ -41,29 +41,55 @@ def getcontext():
     spreadsheet = gc.open_by_key(
         "1BrQxNhXigEgf0o8QNkX7iX3ZODw3CjOhRBmHTJKWWOg")
 
-    worksheet = spreadsheet.get_worksheet(0)
-    columns_to_read = ['Date', 'T1', 'email_T1', 'email_T2', 'T2']
+# Select a specific worksheet (by title or index)
+    # Replace with your worksheet title or index
+    current_month = datetime.now().strftime('%B')
+    current_year = datetime.now().year
+    if current_month == 'December':
+        page = 0
 
-    df = pd.DataFrame(worksheet.get_all_records(
-        empty2zero=False), columns=columns_to_read)
-    today = datetime.today()
-    if today.weekday() == 1:
-        target_date = today.strftime('%Y-%m-%d')
+    elif current_month == 'Feburary':
+        page = 2
+    elif current_month == 'January':
+        page = 1
+    elif current_month == 'March':
+        page = 3
     else:
-        days_since_last_tuesday = (today.weekday() - 1) % 7
-        previous_tuesday = today - timedelta(days=days_since_last_tuesday)
-        target_date = previous_tuesday.strftime('%Y-%m-%d')
+        context = ''
+        return
+
+# Filter DataFrame for rows with the current month and year in the 'Date' column
+    print(current_month, current_year)
+    worksheet = spreadsheet.get_worksheet(page)    
+    columns_to_read = ['Date', 'L11', 'L12', 'L2']
+    columns_to_read4 = ['Name', 'Email', 'Phone']
+    df2 = pd.DataFrame(spreadsheet.get_worksheet(4).get_all_records(
+        empty2zero=False), columns=columns_to_read4)
+    df = pd.DataFrame(worksheet.get_all_records(
+        empty2zero=False), columns=columns_to_read)    
+    today = datetime.today()
+    target_date = today.strftime('%d-%b')
     index_of_date = df['Date'].index[df['Date'] == target_date].tolist()
 
     if index_of_date:
-        index = index_of_date[0]
+        index = index_of_date[0] 
     # Get the value in the 'People' column at the found index
-        people_value1 = df.loc[index, 'T1']
-        people_value2 = df.loc[index, 'T2']
-        people1_email = df.loc[index, 'email_T1']
-        people2_email = df.loc[index, 'email_T2']
-        context = 'Oncalls devsss for today are: \n ' + \
-            people_value1 + '(' + people1_email + '), \n' + people_value2 + ' hells(' + people2_email + ')'
+        people_value1 = df.loc[index, 'L11']
+        index_of_people_value1 = df2['Name'].index[df2['Name'] == people_value1].tolist()
+        number_people1 = df2.loc[index_of_people_value1[0], 'Phone']
+        email_people1 = df2.loc[index_of_people_value1[0], 'Email']        
+        people_value3 = df.loc[index, 'L2']
+        index_of_people_value3 = df2['Name'].index[df2['Name'] == people_value3].tolist()
+        number_people3 = df2.loc[index_of_people_value3[0], 'Phone']
+        email_people3 = df2.loc[index_of_people_value3[0], 'Email']
+        if df.loc[index, 'L12'] == '':
+            context = 'Oncalls devs for today are: \nL1: \n' + people_value1 + '(' + email_people1 + ')(' + str(number_people1) + ')\nL2: \n' + people_value3 + '(' + email_people3 + ')(' + str(number_people3) + ')'
+        else:
+            people_value2 = df.loc[index, 'L12']
+            index_of_people_value2 = df2['Name'].index[df2['Name'] == people_value2].tolist()
+            number_people2 = df2.loc[index_of_people_value2[0], 'Phone']
+            email_people2 = df2.loc[index_of_people_value2[0], 'Email']
+            context = 'Oncalls devs for today are: \nL1: \n' + people_value1 + '(' + email_people1 + ')(' + str(number_people1) + ')\n' + people_value2 + '(' + email_people2 + ')(' + str(number_people2) + ')\nL2: \n' + people_value3 + '(' + email_people3 + ')(' + str(number_people3) + ')'
     else:
         context = 'Spreadsheet needs  to be updated'
     return context
@@ -84,13 +110,12 @@ def hit_curl():
 
 app = Flask(__name__)
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(hit_curl, 'cron', hour=16, minute=53, second=0)
-scheduler.start()
-
 
 @app.route('/')
 def home():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(hit_curl, 'cron', hour=11, minute=15, second=0)
+    scheduler.start()
     return 'Hello, World!'
 
 
