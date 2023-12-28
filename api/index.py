@@ -80,13 +80,14 @@ def getcontext():
         number_people3 = df2.loc[index_of_people_value3[0], 'Phone']
         email_people3 = df2.loc[index_of_people_value3[0], 'Email']
         if df.loc[index, 'L12'] == '':
-            context = 'Oncalls devs for today are: \nL1: \n' + people_value1 + '(' + email_people1 + ')(' + str(number_people1) + ')\nL2: \n' + people_value3 + '(' + email_people3 + ')(' + str(number_people3) + ')'
+            context = '<flockml> Oncalls devs for today are: <br>L1: <br><b>' + people_value1 + '</b><br> Email: ' + email_people1 + '<br>Contact No.: ' + str(number_people1) + '<br><br>L2: <br><b>' + people_value3 + '</b><br>Email: ' + email_people3 + '<br>Contact No.: ' + str(number_people3) + '</flockml>'
+            print(context)
         else:
             people_value2 = df.loc[index, 'L12']
             index_of_people_value2 = df2['Name'].index[df2['Name'] == people_value2].tolist()
             number_people2 = df2.loc[index_of_people_value2[0], 'Phone']
             email_people2 = df2.loc[index_of_people_value2[0], 'Email']
-            context = 'Oncalls devs for today are: \nL1: \n' + people_value1 + '(' + email_people1 + ')(' + str(number_people1) + ')\n' + people_value2 + '(' + email_people2 + ')(' + str(number_people2) + ')\nL2: \n' + people_value3 + '(' + email_people3 + ')(' + str(number_people3) + ')'
+            context = '<flockml> Oncalls devs for today are: <br>L1: <br><b>' + people_value1 + '</b><br> Email: ' + email_people1 + '<br>Contact No.: ' + str(number_people1) + '<br><b>' + people_value2 + '</b><br>Email: ' + email_people2 + '<br>Contact No.: ' + str(number_people2) + '<br><br>L2: <br><b>' + people_value3 + '</b><br>Email: ' + email_people3 + '<br>Contact No. :' + str(number_people3) + '</flockml>'
     else:
         context = 'Spreadsheet needs  to be updated'
     return context
@@ -98,7 +99,7 @@ def hit_curl():
     url = "https://api.flock.com/hooks/sendMessage/b1520c67-2f57-47e9-bb75-651c632dd78d"
     headers = {'Content-Type': 'application/json'}
     json_payload = {
-        "text": context
+        "flockml": context
     }
     response = requests.post(url, headers=headers, json=json_payload)
     logging.info("Function execution completed")
