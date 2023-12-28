@@ -71,6 +71,7 @@ def getcontext():
     if index_of_date:
         index = index_of_date[0] 
     # Get the value in the 'People' column at the found index
+    #adding comments
         people_value1 = df.loc[index, 'L11']
         index_of_people_value1 = df2['Name'].index[df2['Name'] == people_value1].tolist()
         number_people1 = df2.loc[index_of_people_value1[0], 'Phone']
@@ -142,4 +143,4 @@ def run_script():
 
 @app.route('/about')
 def about():
-    return 'About'
+    return 'About your page'
