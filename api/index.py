@@ -1,13 +1,10 @@
 import json
 from flask import Flask, jsonify, request
-import schedule
-import time
 import requests
 import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from datetime import datetime, timedelta
-from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime
 import logging
 
 # Configure logging to output to the console
@@ -113,10 +110,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(hit_curl, 'cron', hour=11, minute=15, second=0)
-    scheduler.start()
     return 'Hello, World!'
+
+
+@app.route('/cron')
+def cron_trigger():
+    hit_curl()
 
 
 @app.route('/run_script', methods=['POST'])
@@ -127,7 +126,7 @@ def run_script():
 
         # Access 'token' and 'text' values from the payload
         text_value = payload_data.get('text', None)
-        if text_value == 'oncall/cart':
+        if text_value == '#oncall/cart':
             context = getcontext()
             url = "https://api.flock.com/hooks/sendMessage/b1520c67-2f57-47e9-bb75-651c632dd78d"
             headers = {'Content-Type': 'application/json'}
